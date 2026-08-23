@@ -1,11 +1,17 @@
 # PEPSE — Procedural Environment Platformer & Simulator Ecosystem
 
+> A modular, 2D procedural open-world game built in **Java** leveraging advanced **Object-Oriented Programming (OOP)** patterns, procedural generation (Perlin-style noise), event-driven interaction systems, and realistic physics using the **DanoGL** engine framework.
+> 
+
 ![Java](https://img.shields.io/badge/Language-Java_11%2B-orange?style=for-the-badge&logo=openjdk)
+
 ![Architecture](https://img.shields.io/badge/Architecture-Object--Oriented_Design-blue?style=for-the-badge)
+
 ![Engine](https://img.shields.io/badge/Engine-DanoGL-green?style=for-the-badge)
+
 ![Generation](https://img.shields.io/badge/Terrain-Procedural_%26_Infinite-purple?style=for-the-badge)
 
-> A modular, 2D procedural open-world game built in **Java** leveraging advanced **Object-Oriented Programming (OOP)** patterns, procedural generation (Perlin-style noise), event-driven interaction systems, and realistic physics using the **DanoGL** engine framework.
+
 ---
 
 ## 🌟 Key Features
@@ -25,6 +31,7 @@
   * **Wind & Micro-Animations:** Background leaves feature continuous subtle transition dynamics to simulate wind.
 
 ---
+```
 pepse/
 ├── PepseGameManager.java     # Game entry point, loop initialization, and camera tracking
 ├── world/
@@ -39,7 +46,7 @@ pepse/
 ├── Tree.java             # Structural composite/facade grouping trunks, leaves, and fruits
 ├── Leaf.java             # Animated leaf object with collision & movement behavior
 └── Fruit.java            # Interactive energy-replenishing game object
-
+```
 ---
 
 ## 📐 Object-Oriented Design & Architectural Insights
