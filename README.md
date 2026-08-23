@@ -63,17 +63,18 @@ To streamline ecosystem management, two levels of abstraction were used to decou
 ### 1. Procedural Terrain Generation
 Instead of pre-rendered tilemaps, terrain height at any continuous point $x$ is computed mathematically using noise offsets relative to the window dimensions:
 
-```java
+```
 public float groundHeightAt(float x) {
     float noise = (float) noiseGenerator.noise(x, NOISE_FACTOR);
     return groundHeightAtX0 + noise;
 }
+```
 
 ### 2. Event-Driven Jump Callbacks (Observer Pattern)
 
 The `Avatar` delegates actions to the environment using a decoupled `Runnable` callback mechanism without hard-coding direct dependencies on tree elements:
 
-```java
+```
 // Avatar.java
 if (inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0) {
     if (this.energy >= JUMP_ENERGY) {
@@ -101,12 +102,16 @@ if (inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0) {
    git clone https://github.com/your-username/pepse-procedural-world.git
    cd pepse-procedural-world
    ```
+
 2. Compile the source code:
+```
 javac -cp "lib/DanoGL.jar:." src/pepse/PepseGameManager.java -d bin/
+```
 
 3. Run the game:
+```
 java -cp "lib/DanoGL.jar:bin" pepse.PepseGameManager
-
+```
 ---
 
 ## 🎮 Controls
@@ -123,6 +128,6 @@ java -cp "lib/DanoGL.jar:bin" pepse.PepseGameManager
 ## 🛠️ Tech Stack & Concepts Demonstrated
 
 * **Language:** Java 11+
-* **Engine / Library:** DanoGL (2D Game Development Framework)
+* **Engine / Library:** DanoGL (2D Game Development Framework) (Provided in third party library)
 * **Design Patterns:** Facade Pattern, Observer/Callback Pattern, State Pattern, Composite Pattern
 * **Physics & Math:** Kinematic motion, collision handling, 1D/2D Noise generation, vector transformation
