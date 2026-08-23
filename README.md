@@ -7,9 +7,13 @@
 
 ![Architecture](https://img.shields.io/badge/Architecture-Object--Oriented_Design-blue?style=for-the-badge)
 
-![Engine](https://img.shields.io/badge/Engine-DanoGL-green?style=for-the-badge)
 
-![Generation](https://img.shields.io/badge/Terrain-Procedural_%26_Infinite-purple?style=for-the-badge)
+![Generation](https://img.shields.io/badge/Terrain-Procedural-purple?style=for-the-badge)
+
+![Engine](https://img.shields.io/badge/Engine-DanoGL-green?style=for-the-badge) 
+
+*(engine provided as third party library)*
+
 
 
 ---
