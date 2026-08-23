@@ -17,7 +17,7 @@ public class Avatar extends GameObject {
     /* ************** Constants ************** */
     private static final Vector2 AVATAR_DIMENSIONS = new Vector2(30,30);
     private static final String INITIAL_ANIMATION = "assets/idle_0.png";
-    private static final float GRAVITY = 550;
+    private static final float GRAVITY = 450; // bug where initial fall made him go through ground when too fast!
     private enum ActionState{
         RUNNING(0.1),
         JUMPING(0.3),
