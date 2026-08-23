@@ -1,24 +1,128 @@
-or.waingortin
-206396525
+# PEPSE — Procedural Environment Platformer & Simulator Ecosystem
 
-In this project I implemented the package trees using the class Tree
-which works similarly to a facade by grouping together all of the
-trunk, leaves, and fruit objects.
-It both creates the objects as a unit and allows them to be
-accessed together by the GameManager or Floral classes. (pretty functional oriented)
+![Java](https://img.shields.io/badge/Language-Java_11%2B-orange?style=for-the-badge&logo=openjdk)
+![Architecture](https://img.shields.io/badge/Architecture-Object--Oriented_Design-blue?style=for-the-badge)
+![Engine](https://img.shields.io/badge/Engine-DanoGL-green?style=for-the-badge)
+![Generation](https://img.shields.io/badge/Terrain-Procedural_%26_Infinite-purple?style=for-the-badge)
 
-The trunk of the tree is just a normal Block for all intents and purposes
-while the subclass Leaf extends Block and was created because I felt
-Leaf has enough substance to justify a separate class (collision AND movement).
-I considered trying a strategy design pattern but chose not to pursue due to
-the complexity of needing to manage BOTH the collisions and movements through the
-strategy and quite frankly, a lack of time.
-Vaguely speaking I would probably use an interface with 2 functions to accomplish
-the feat and then call the appropriate function from within Block's overriden functions.
+> A modular, 2D procedural open-world game built in **Java** leveraging advanced **Object-Oriented Programming (OOP)** patterns, procedural generation (Perlin-style noise), event-driven interaction systems, and realistic physics using the **DanoGL** engine framework.
+---
 
-Fruit was implemented as extending GameObject, but with a bit more time I probably could
-have extended it from block or turned it into a strategy (the problem was that once set
-the mass would cause bugs and I couldn't find the way to turn mass off in time to turn it in).
+## 🌟 Key Features
 
-Finally the Flora class is in charge of the environment as a whole and so to some degree
-works as a bigger encapsulating facade for when the entire environment must be managed or changed.
+* **🎲 Seed-Based Procedural Generation:**
+  * **Dynamic Terrain:** The world contour and height map are calculated dynamically on startup using seed-based noise functions (`NoiseGenerator`), ensuring a unique topography every session.
+  * **Procedural Vegetation:** Trees and leaves are generated non-deterministically across valid terrain blocks with varying densities and heights.
+
+* **⚡ Interactive Mechanics & Energy System:**
+  * **Custom Action-State Machine:** Smooth animation state transitions (`IDLE`, `RUNNING`, `JUMPING`) with directional flipping and velocity handling.
+  * **Resource Management:** Real-time energy constraints (Jumping: `-10%`, Running: `-0.5%`/step, Resting: `+1%`/step).
+  * **Exhaustion State Physics:** If energy drops to zero, player inputs are locked, but realistic environmental physics (gravity, collision forces) continue to act on the character.
+  * **Consumable Collectibles:** Tree-spawned fruits replenish player energy upon collision (`+10%` per fruit) and trigger dynamic lifecycle respawns.
+
+* **🍃 Event-Driven Environmental Interactions:**
+  * **Observer / Callback Pattern:** Jumping triggers a visual shift in the ecosystem — surrounding tree leaves rotate dynamically and fruits undergo color variations upon jump events.
+  * **Wind & Micro-Animations:** Background leaves feature continuous subtle transition dynamics to simulate wind.
+
+---
+pepse/
+├── PepseGameManager.java     # Game entry point, loop initialization, and camera tracking
+├── world/
+│   ├── Avatar.java           # Player controller, energy management & state machine
+│   ├── Block.java            # Immutable base building block for physics boundaries
+│   ├── Terrain.java          # Procedural ground generator (Noise & Block calculation)
+│   ├── Sky.java              # Background sky environment renderer
+│   ├── Night.java            # Day/Night atmospheric overlay
+│   └── Sun.java / SunHalo    # Celestial movement & lighting effects
+└── trees/
+├── Flora.java            # High-level environmental facade & plant manager
+├── Tree.java             # Structural composite/facade grouping trunks, leaves, and fruits
+├── Leaf.java             # Animated leaf object with collision & movement behavior
+└── Fruit.java            # Interactive energy-replenishing game object
+
+---
+
+## 📐 Object-Oriented Design & Architectural Insights
+
+### 1. Multi-Tiered Facade Pattern (`Flora` & `Tree`)
+To streamline ecosystem management, two levels of abstraction were used to decouple individual game elements from the main game loop:
+* **`Tree` Class (Local Facade / Composite):** Groups and manages individual trunk blocks, leaf arrays, and fruit elements. It treats a tree as a single entity during initialization and manipulation while providing clean aggregated access to the `GameManager` and `Flora` classes.
+* **`Flora` Class (Global Facade):** Acts as the high-level manager for the entire vegetation subsystem, coordinating plant generation across generated terrain regions.
+
+### 2. Class Specialization vs. Composition (`Leaf` & `Fruit`)
+* **`Leaf` (Extends `Block`):** Inheriting from `Block` was chosen over composition because `Leaf` requires both physical spatial bounds and complex animation/movement states triggered by jump callbacks, justifying a dedicated subclass.
+* **`Fruit` (Extends `GameObject`):** Inheriting directly from `GameObject` allowed fine-grained control over collision tags and energy interaction logic while decoupling it from static ground physics.
+
+### 3. Future Architectural Trade-offs & Refactoring Reflections
+* **Strategy Pattern Considerations:** During development, replacing hardcoded leaf and fruit animations/collisions with a **Strategy Pattern** was evaluated (using an interface with dedicated collision and movement strategy contracts). While inheritance was selected due to implementation timelines, transitioning to a Strategy Pattern in future iterations would further enhance modularity by decoupling physics components from rendering animations.
+
+---
+
+## 🔬 Core Implementation Highlights
+
+### 1. Procedural Terrain Generation
+Instead of pre-rendered tilemaps, terrain height at any continuous point $x$ is computed mathematically using noise offsets relative to the window dimensions:
+
+```java
+public float groundHeightAt(float x) {
+    float noise = (float) noiseGenerator.noise(x, NOISE_FACTOR);
+    return groundHeightAtX0 + noise;
+}
+
+### 2. Event-Driven Jump Callbacks (Observer Pattern)
+
+The `Avatar` delegates actions to the environment using a decoupled `Runnable` callback mechanism without hard-coding direct dependencies on tree elements:
+
+```java
+// Avatar.java
+if (inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0) {
+    if (this.energy >= JUMP_ENERGY) {
+        this.energy -= JUMP_ENERGY;
+        this.transform().setVelocityY(JUMP_LAUNCH_VELOCITY);
+        if (this.jumpEffect != null) {
+            this.jumpEffect.run(); // Triggers foliage movement & fruit transformations
+        }
+    }
+}
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+* **Java Development Kit (JDK):** Version 11 or higher.
+* **DanoGL Engine:** `DanoGL.jar` library added to the project classpath.
+
+### Compilation & Execution
+
+1. **Clone the repository:**
+   ```
+   git clone https://github.com/your-username/pepse-procedural-world.git
+   cd pepse-procedural-world
+   ```
+2. Compile the source code:
+javac -cp "lib/DanoGL.jar:." src/pepse/PepseGameManager.java -d bin/
+
+3. Run the game:
+java -cp "lib/DanoGL.jar:bin" pepse.PepseGameManager
+
+---
+
+## 🎮 Controls
+
+| Action | Control Key | Energy Cost | Notes |
+| :--- | :--- | :--- | :--- |
+| **Move Left / Right** | `←` / `→` Arrow Keys | `-0.5%` / tick | Locks when energy = 0% |
+| **Jump** | `Spacebar` | `-10%` per launch | Triggers leaf & fruit reaction |
+| **Rest / Idle** | *No Input* | `+1.0%` / tick | Replenishes energy up to 100% |
+| **Eat Fruit** | *Walk into Fruit* | `+10.0%` gain | Instantly consumed & scheduled to respawn |
+
+---
+
+## 🛠️ Tech Stack & Concepts Demonstrated
+
+* **Language:** Java 11+
+* **Engine / Library:** DanoGL (2D Game Development Framework)
+* **Design Patterns:** Facade Pattern, Observer/Callback Pattern, State Pattern, Composite Pattern
+* **Physics & Math:** Kinematic motion, collision handling, 1D/2D Noise generation, vector transformation
